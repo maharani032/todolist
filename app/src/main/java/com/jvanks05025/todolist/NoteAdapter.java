@@ -1,5 +1,6 @@
 package com.jvanks05025.todolist;
 
+import android.app.Application;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,7 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +57,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             titleTodo=itemView.findViewById(R.id.titleToDo);
             doneButton=itemView.findViewById(R.id.doneButton);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            doneButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position=getAdapterPosition();
@@ -62,6 +66,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                     }
                 }
             });
+
         }
     }
     public interface OnItemClickListener{

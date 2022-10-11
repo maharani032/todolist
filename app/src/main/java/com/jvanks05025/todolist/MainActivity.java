@@ -4,8 +4,11 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private NoteViewModel noteViewModel;
@@ -29,13 +33,15 @@ public class MainActivity extends AppCompatActivity {
     TextView saveButton, cancelButton;
     EditText inputToDo;
 
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RegisterActivityForAddNote();
 
         addButton=findViewById(R.id.addButton);
 
@@ -50,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
         //                UPDATE RECYCLER VIEW
         noteViewModel.getAllNotes().observe(this, adapter::setNotes);
 
+        adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Note note) {
+                noteViewModel.delete(note);
+            }
+        });
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
     public void onButtonShowPopUP(View view){
         LayoutInflater inflater=(LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View addPopUpView=inflater.inflate(R.layout.add_note,null);
@@ -83,31 +98,19 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("informasi","in save button");
 
                 String noteTitle=inputToDo.getText().toString();
-
-                Intent i =new Intent();
-                i.putExtra("titletodo",noteTitle);
-                setResult(RESULT_OK,i);
-                popupWindow.dismiss();
-            }
-        });
-
-    }
-
-    public void RegisterActivityForAddNote(){
-        activityResultLauncherForAddNote = registerForActivityResult(new ActivityResultContracts
-                .StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                Log.i("informasi","in registeractivityforaddnote");
-                int ResultCode = result.getResultCode();
-                Intent data= result.getData();
-
-                if (ResultCode==RESULT_OK && data !=null){
-                    String title=data.getStringExtra("titletodo");
-                    Note note= new Note(title);
+                if(noteTitle.length()!=0){
+                    Note note= new Note(noteTitle);
                     noteViewModel.insert(note);
                 }
+
+                popupWindow.dismiss();
             }
+
         });
+        if (!popupWindow.isShowing()){
+            Log.i("informasi","in finish");
+            finish();
+        }
     }
+
 }
