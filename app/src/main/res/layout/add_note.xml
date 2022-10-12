@@ -7,12 +7,14 @@
     android:padding="15dp"
     android:background="@drawable/background_popup">
     <TextView
+        android:id="@+id/textview1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_a_new_task"
         android:textStyle="bold"
         android:textSize="20sp"/>
     <TextView
+        android:id="@+id/textview2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/what_do_you_want_to_do_next"

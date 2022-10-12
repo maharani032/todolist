@@ -3,13 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Program/AndroidJava/TodoList/app/src/main/res/drawable/background_card.xml" value="0.119" />
         <entry key="..\:/Program/AndroidJava/TodoList/app/src/main/res/drawable/background_input.xml" value="0.119" />
         <entry key="..\:/Program/AndroidJava/TodoList/app/src/main/res/drawable/background_popup.xml" value="0.1" />
         <entry key="..\:/Program/AndroidJava/TodoList/app/src/main/res/drawable/ic_baseline_add_circle_outline_24.xml" value="0.119" />
         <entry key="..\:/Program/AndroidJava/TodoList/app/src/main/res/drawable/ic_launcher_background.xml" value="0.119" />
         <entry key="..\:/Program/AndroidJava/TodoList/app/src/main/res/layout/activity_main.xml" value="0.2125" />
         <entry key="..\:/Program/AndroidJava/TodoList/app/src/main/res/layout/add_note.xml" value="0.25" />
-        <entry key="..\:/Program/AndroidJava/TodoList/app/src/main/res/layout/note_card.xml" value="0.2125" />
+        <entry key="..\:/Program/AndroidJava/TodoList/app/src/main/res/layout/note_card.xml" value="0.33" />
       </map>
     </option>
   </component>

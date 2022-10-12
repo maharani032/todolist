@@ -1,19 +1,12 @@
 package com.jvanks05025.todolist;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,17 +17,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
-
 public class MainActivity extends AppCompatActivity {
     private NoteViewModel noteViewModel;
-    ActivityResultLauncher<Intent> activityResultLauncherForAddNote;
     ImageView addButton;
-    TextView saveButton, cancelButton;
+    TextView saveButton, cancelButton,textView1,textView2;
     EditText inputToDo;
 
     private AlertDialog.Builder dialogBuilder;
-    private AlertDialog dialog;
+    private AlertDialog.Builder dialog;
 
 
 
@@ -56,13 +46,53 @@ public class MainActivity extends AppCompatActivity {
         //                UPDATE RECYCLER VIEW
         noteViewModel.getAllNotes().observe(this, adapter::setNotes);
 
-        adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListenerDelete(new NoteAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Note note) {
                 noteViewModel.delete(note);
             }
         });
+        adapter.setOnItemClickListenerUpdate(new NoteAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Note note) {
+                int id=note.getId();
+                dialog= new AlertDialog.Builder(MainActivity.this);
+                LayoutInflater inflater =(LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                View updateToDo=inflater.inflate(R.layout.add_note,null);
 
+                saveButton=updateToDo.findViewById(R.id.save_button);
+                cancelButton=updateToDo.findViewById(R.id.cancel_button);
+                inputToDo=updateToDo.findViewById(R.id.inputToDo);
+                textView1=updateToDo.findViewById(R.id.textview1);
+                saveButton.setText("Update");
+                inputToDo.setText(note.getTodo().toString());
+                textView1.setText("Update a task");
+                dialog.setView(updateToDo);
+                AlertDialog alertDialog=dialog.create();
+                alertDialog.show();
+
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+                saveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String title=inputToDo.getText().toString();
+                        if(inputToDo.getText().length()!=0){
+                            Note note= new Note(title);
+                            note.setId(id);
+                            noteViewModel.update(note);
+                        }
+                        alertDialog.dismiss();
+
+                    }
+                });
+
+            }
+        });
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

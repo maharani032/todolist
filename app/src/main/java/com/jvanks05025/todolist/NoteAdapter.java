@@ -1,24 +1,24 @@
 package com.jvanks05025.todolist;
 
-import android.app.Application;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     private List<Note> notes= new ArrayList<>();
-    private OnItemClickListener listener;
+    private OnItemClickListener listenerDelete,listenerUpdate;
+
     @NonNull
     @Override
     public NoteAdapter.NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -61,18 +61,33 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                 @Override
                 public void onClick(View view) {
                     int position=getAdapterPosition();
-                    if (listener != null && position != RecyclerView.NO_POSITION){
-                        listener.onItemClick(notes.get(position));
+                    if (listenerDelete != null && position != RecyclerView.NO_POSITION){
+                        listenerDelete.onItemClick(notes.get(position));
                     }
                 }
             });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position=getAdapterPosition();
+                    if(listenerUpdate!=null && position!=RecyclerView.NO_POSITION){
+                        listenerUpdate.onItemClick(notes.get(position));
+//                    dialog=new AlertDialog.Builder(context).setView(R.layout.add_note);
+
+                }
+            }
+            });
+
 
         }
     }
     public interface OnItemClickListener{
         void onItemClick(Note note);
     }
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.listener=listener;
+    public void setOnItemClickListenerDelete(OnItemClickListener listener){
+        this.listenerDelete=listener;
+    }
+    public void setOnItemClickListenerUpdate(OnItemClickListener listener){
+        this.listenerUpdate=listener;
     }
 }
